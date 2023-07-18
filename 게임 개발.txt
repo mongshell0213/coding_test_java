@@ -1,0 +1,61 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static int turnL(int index){
+        if(index==3)
+            return 0;
+        else return index+1;
+    }
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String size=br.readLine();
+        StringTokenizer st=new StringTokenizer(size);
+        int N=Integer.parseInt(st.nextToken());
+        int M=Integer.parseInt(st.nextToken());
+
+        String setting = br.readLine();
+        st = new StringTokenizer(setting);
+        int x = Integer.parseInt(st.nextToken());
+        int y = Integer.parseInt(st.nextToken());
+        int dir=Integer.parseInt(st.nextToken());
+        int count=0;
+        int ncount=0; //이동하지 못한 횟수
+
+        int[] moveX={-1,0,1,0};
+        int[] moveY={0,-1,0,1};
+
+        int[][] map = new int[N][M];
+        for(int i=0;i<N;i++){
+            String temp = br.readLine();
+            st = new StringTokenizer(temp);
+            for(int j=0;j<M;j++)
+                map[i][j]=Integer.parseInt(st.nextToken());
+        }
+
+        map[y][x]=2; // 방문 표시
+        int nx,ny;
+        count++;
+        while(true){
+            dir=turnL(dir);
+            nx=x+moveX[dir];
+            ny=y+moveY[dir];
+            if(nx>=0 && nx<4 && ny>=0 && ny<4 && map[ny][nx]==0){
+                x=nx;y=ny;map[y][x]=2;
+                count++;
+            }
+            else if(nx>=0 && nx<4 && ny>=0 && ny<4 && map[ny][nx]!=0) {
+                ncount++;
+            }
+            if(ncount==4){
+                nx=x-moveX[dir];
+                ny=y=moveY[dir];
+                if(map[ny][nx]!=1){
+                    x=nx;y=ny;
+                }
+                else break;
+            }
+        }
+        System.out.print(count);
+    }
+}

@@ -1,0 +1,18 @@
+import java.io.*;
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int[] move1={2,2,-2,-2,-1,1,-1,1};
+        int[] move2={-1,1,-1,1,-2,-2,2,2};
+        String cur=br.readLine();
+        int x=cur.charAt(0)-96;
+        int y=cur.charAt(1)-48;
+        int count=0;
+
+        for(int i=0;i<8;i++){
+            if(x+move1[i]>0 && x+move1[i]<9 && y+move2[i]>0 && y+move2[i]<9)
+                count++;
+        }
+        System.out.println(count);
+    }
+}

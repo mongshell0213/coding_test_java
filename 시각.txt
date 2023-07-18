@@ -1,0 +1,21 @@
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        Integer N = Integer.parseInt(br.readLine()); //NxN의 정사각형 크기
+        int count=0;
+        int minute,second;
+
+        for(int i=0;i<=N;i++){
+            for(minute=0;minute<60;minute++){
+                for(second=0;second<60;second++){
+                    if(String.valueOf(i).contains("3") || String.valueOf(minute).contains("3") || String.valueOf(second).contains("3")){
+                        count++;
+                    }
+                }
+            }
+        }
+        System.out.println(count);
+    }
+}

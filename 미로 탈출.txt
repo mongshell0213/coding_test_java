@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+class Node{
+    private int x,y;
+    Node(int x,int y){
+        this.x = x;
+        this.y = y;
+    }
+    public int getX(){return this.x;}
+    public int getY(){return this.y;}
+}
+public class Main {
+    public static int[][] graph=new int[1000][1000];
+    public static int n;
+    public static int m;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n=Integer.parseInt(st.nextToken());
+        m=Integer.parseInt(st.nextToken());
+
+        for(int i=0;i<n;i++){
+            String temp=br.readLine();
+            for(int j=0;j<m;j++){
+                graph[i][j]=temp.charAt(j)-'0';
+            }
+        }
+
+        int[] dx = {1,-1,0,0};
+        int[] dy = {0,0,1,-1};
+
+        System.out.print(bfs(0,0,dx,dy));
+
+    }
+    static int bfs(int x,int y,int[] dx,int[] dy){
+        Queue<Node>queue = new LinkedList<>();
+        queue.offer(new Node(x,y));
+        while(!queue.isEmpty()){
+            Node node = queue.poll();
+            x=node.getX();
+            y=node.getY();
+            for(int i=0;i<4;i++){
+                int nx = x+dx[i];
+                int ny = y+dy[i];
+                if(nx<0 || ny<0 || nx>=n || ny>=m)
+                    continue;
+                if(graph[nx][ny]==0)
+                    continue;
+                if(graph[nx][ny]==1){
+                    graph[nx][ny]=graph[x][y]+1;
+                    queue.offer(new Node(nx,ny));
+                }
+            }
+        }
+        return graph[n-1][m-1];
+    }
+}
