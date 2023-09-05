@@ -1,0 +1,98 @@
+import java.io.*;
+import java.util.*;
+class House{
+    private int r;
+    private int c;
+    House(int r,int c){
+        this.r=r;
+        this.c=c;
+    }
+    public int getR(){
+        return this.r;
+    }
+    public int getC(){
+        return this.c;
+    }
+    ArrayList<Integer>distances = new ArrayList<>();
+}
+class Chicken{
+    private int r;
+    private int c;
+    Chicken(int r,int c){
+        this.r=r;
+        this.c=c;
+    }
+    public int getR(){
+        return this.r;
+    }
+    public int getC(){
+        return this.c;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st=new StringTokenizer(br.readLine());
+        int n=Integer.parseInt(st.nextToken()); // nxn의 맵 크기
+        int m=Integer.parseInt(st.nextToken()); // 남겨놓아야하는 치킨집의 개수
+        ArrayList<Chicken> chickens=new ArrayList<>();
+        ArrayList<House> houses = new ArrayList<>();
+
+        for(int i=1;i<=n;i++){
+            st=new StringTokenizer(br.readLine());
+            for(int j=1;j<=n;j++){
+                String temp=st.nextToken();
+                if(temp.equals("1"))
+                    houses.add(new House(i,j));
+                else if(temp.equals("2"))
+                    chickens.add(new Chicken(i,j));
+            }
+        }
+        for(int i=0;i<houses.size();i++){
+            for(int j=0;j<chickens.size();j++){
+                int distance=Math.abs(houses.get(i).getR()-chickens.get(j).getR())+Math.abs(houses.get(i).getC()-chickens.get(j).getC());
+                houses.get(i).distances.add(distance);
+            }
+        }
+        minCityChickenDistance(houses,chickens,m);
+    }
+    public static void minCityChickenDistance(ArrayList<House>houses,ArrayList<Chicken>chickens,int chickenNum){
+        int result=Integer.MAX_VALUE;
+        int sum=0;
+        ArrayList<ArrayList<Integer>> combinations=new ArrayList<>();
+        List<Integer> values = new ArrayList<>();
+        for (int i = 1; i <= chickens.size(); i++) {
+            values.add(i);
+        }
+        getCombinations(values,chickenNum,new ArrayList<>(),combinations);
+        for(int i=0;i< combinations.size();i++){
+            sum=0;
+            for(int j=0;j< houses.size();j++){
+                int temp=Integer.MAX_VALUE;
+                for(int k=0;k<chickenNum;k++){
+                    int index=combinations.get(i).get(k)-1;
+                    if(temp>houses.get(j).distances.get(index))
+                        temp=houses.get(j).distances.get(index);
+                }
+                sum+=temp;
+            }
+            if(result>sum)
+                result=sum;
+        }
+        System.out.println(result);
+    }
+    public static void getCombinations(List<Integer> values, int r, List<Integer> temp, ArrayList<ArrayList<Integer>> result){
+
+        if(temp.size()==r){
+            result.add(new ArrayList<>(temp));
+            return;
+        }
+        for (int i = 0; i < values.size(); i++) {
+            temp.add(values.get(i));
+            ArrayList<Integer>remaining=new ArrayList<>(values.subList(i+1, values.size()));
+            getCombinations(remaining, r, temp, result);
+            temp.remove(temp.size() - 1);
+        }
+    }
+}

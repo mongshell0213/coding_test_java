@@ -1,0 +1,84 @@
+import java.io.*;
+import java.util.*;
+
+class Snake {
+    int row;
+    int col;
+    Snake(int row,int col){
+        this.row=row;
+        this.col=col;
+    }
+}
+class Rotate{
+    int time;
+    String d;
+    Rotate(int time,String d){
+        this.time=time;
+        this.d=d;
+    }
+}
+public class Main {
+    static int count=0;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n=Integer.parseInt(br.readLine());
+        int[][] map = new int[n][n];
+        int[] dx= {1,0,-1,0};
+        int[] dy= {0,1,0,-1}; // 동,남,서,북
+        int k=Integer.parseInt(br.readLine());
+        StringTokenizer st;
+        for(int i=0;i<k;i++){
+            st=new StringTokenizer(br.readLine());
+            int row=Integer.parseInt(st.nextToken());
+            int col=Integer.parseInt(st.nextToken()); //사과 위치
+            map[row-1][col-1]=1; //사과 표시
+        }
+        int index=0;
+        map[0][0]=2; // 뱀 표시
+        Deque<Snake>deque=new LinkedList<>();
+        Queue<Rotate>queue=new LinkedList<>();
+        k=Integer.parseInt(br.readLine());
+        for(int i=0;i<k;i++){
+            st=new StringTokenizer(br.readLine());
+            queue.add(new Rotate(Integer.parseInt(st.nextToken()),st.nextToken()));
+        }
+        deque.addLast(new Snake(0,0));
+        while(true){
+            Snake cur=deque.peekFirst();
+            int curRow= cur.row;
+            int curCol= cur.col;
+            curRow+=dy[index];
+            curCol+=dx[index];
+            count++;
+
+            Rotate rotate=queue.peek();
+            if(rotate!=null && count== rotate.time) {
+                index = direction(index, rotate.d);
+                queue.poll();
+            }
+
+            if(curRow<0 || curRow>=n || curCol<0 || curCol>=n)
+                break;
+
+            if (map[curRow][curCol] == 2)
+                break;
+            if (map[curRow][curCol] == 0) {
+                Snake temp = deque.pollLast();
+                map[temp.row][temp.col] = 0;
+            }
+            map[curRow][curCol] = 2;
+            deque.addFirst(new Snake(curRow, curCol));
+        }
+        System.out.println(count);
+    }
+    public static int direction(int cur,String d){
+        if(d.equals("D"))
+            cur=(cur+1)%4;
+        else{
+            if(cur==0)
+                cur=3;
+            else cur-=1;
+        }
+        return cur;
+    }
+}

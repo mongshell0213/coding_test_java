@@ -1,0 +1,18 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String temp=br.readLine();
+        int n=temp.length();
+        int result=Integer.parseInt(String.valueOf(temp.charAt(0)));
+        for(int i=1;i<n;i++){
+            int x=Integer.parseInt(String.valueOf(temp.charAt(i)));
+            if(result!=0 && x!=0)
+                result*=x;
+            else result+=x;
+        }
+        System.out.print(result);
+    }
+}

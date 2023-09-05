@@ -1,0 +1,40 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static int n,m;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n=Integer.parseInt(st.nextToken()); // 노드의 수
+        m=Integer.parseInt(st.nextToken()); // 간선의 수
+        int[] parent = new int[n+1];
+        for(int i=0;i<=n;i++)
+            parent[i]=i;
+        while(m-- >0){
+            st=new StringTokenizer(br.readLine());
+            int oper = Integer.parseInt(st.nextToken());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            if(oper==0)
+                union(a,b,parent);
+            else{
+                if(find(a,parent)==find(b,parent))
+                    System.out.println("YES");
+                else System.out.println("NO");
+            }
+        }
+    }
+    static void union(int a,int b,int[] parent){
+        a=find(a,parent);
+        b=find(b,parent);
+        if(a<b)
+            parent[b]=a;
+        else parent[a]=b;
+    }
+    static int find(int a,int[] parent){
+        if(parent[a]!=a)
+            parent[a]=find(parent[a],parent);
+        return parent[a];
+    }
+}

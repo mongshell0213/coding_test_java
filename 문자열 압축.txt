@@ -1,0 +1,26 @@
+class Solution {
+    public int solution(String s) {
+        int answer=s.length();
+        for(int i=1;i<s.length()/2+1;i++){
+            int num=1;
+            String temp="";
+            String sub = s.substring(0,i);
+            int j=i;
+            for(;j+i<=s.length();j+=i){
+                String cur=s.substring(j,j+i);
+                if(sub.equals(cur))
+                    num++;
+                else{
+                    temp+= (num>=2)?num+sub : sub;
+                    sub=cur;
+                    num=1;
+                }
+            }
+            temp+= (num>=2)?num+sub : sub;
+            for(;j<s.length();j++)
+                temp+=s.charAt(j);
+            answer=Math.min(answer,temp.length());
+        }
+        return answer;
+    }
+}
